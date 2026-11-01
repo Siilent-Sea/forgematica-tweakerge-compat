@@ -1,0 +1,43 @@
+modLoader="javafml"
+loaderVersion="[4,)"
+license="MIT"
+
+[[mods]]
+modId="placement_compat"
+version="0.1.1-local"
+displayName="ForgeMatica and Tweakerge Placement Compatibility"
+authors="Local compatibility project"
+description='''
+Combine the existing placement-check options from ForgeMatica and Tweakerge.
+'''
+
+[[mixins]]
+config="placement_compat.mixins.json"
+
+[[dependencies.placement_compat]]
+modId="neoforge"
+type="required"
+versionRange="[21.1,)"
+ordering="NONE"
+side="BOTH"
+
+[[dependencies.placement_compat]]
+modId="minecraft"
+type="required"
+versionRange="[1.21.1,1.21.2)"
+ordering="NONE"
+side="BOTH"
+
+[[dependencies.placement_compat]]
+modId="forgematica"
+type="required"
+versionRange="[0.4.3,0.4.4)"
+ordering="AFTER"
+side="BOTH"
+
+[[dependencies.placement_compat]]
+modId="tweakerge"
+type="required"
+versionRange="[0.4.3,0.4.4)"
+ordering="AFTER"
+side="BOTH"

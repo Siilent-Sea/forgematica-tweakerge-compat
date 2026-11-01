@@ -1,0 +1,42 @@
+plugins {
+    id 'java'
+    id 'net.neoforged.moddev' version '2.0.105'
+}
+
+group = 'dev.minecraftcompat'
+version = '0.1.1-local'
+base { archivesName = 'forgematica-tweakerge-compat' }
+java.toolchain.languageVersion = JavaLanguageVersion.of(21)
+
+repositories { mavenCentral() }
+
+neoForge {
+    version = '21.1.265'
+    mods {
+        placement_compat { sourceSet(sourceSets.main) }
+    }
+}
+
+// Directory holding the ForgeMatica / Tweakerge / MaFgLib jars; they are
+// compileOnly dependencies and are never bundled.
+def compatModsDir = providers.gradleProperty('compat_mods_dir')
+if (!compatModsDir.present) {
+    throw new GradleException('Set -Pcompat_mods_dir to a directory containing ' +
+        'forgematica-0.4.3+mc1.21.1.jar, tweakerge-0.4.3+mc1.21.1.jar and mafglib-0.4.3+mc1.21.1.jar')
+}
+def packMods = file(compatModsDir.get())
+dependencies {
+    compileOnly fileTree(dir: packMods, includes: ['*forgematica-*.jar', '*tweakerge-*.jar', '*mafglib-*.jar'],
+        excludes: ['forgematica-tweakerge-compat-*.jar'])
+    testImplementation platform('org.junit:junit-bom:5.11.4')
+    testImplementation 'org.junit.jupiter:junit-jupiter'
+    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+}
+
+tasks.withType(JavaCompile).configureEach { options.release = 21 }
+tasks.test { useJUnitPlatform() }
+tasks.withType(AbstractArchiveTask).configureEach {
+    preserveFileTimestamps = false
+    reproducibleFileOrder = true
+}
+tasks.named('jar') { from('LICENSE') }
